@@ -1,15 +1,13 @@
-Sure Atharva! Here's your content properly formatted in **Markdown** for a `README.md` file on GitHub:
 
----
 
-```markdown
-# 🧠 AI Document Summarizer
+
+🧠 AI Document Summarizer
 
 A powerful web application that summarizes `.pdf`, `.docx`, and `.txt` files using the **Mixtral-8x7B-Instruct** model via Hugging Face Inference API. Built with **Flask (Python)** for the backend and **HTML/CSS/JavaScript** for the frontend, this tool is designed for students, researchers, and professionals who want to extract concise, meaningful summaries from large documents.
 
 ---
 
-## 📌 Features
+📌 Features
 
 - ✅ Upload support for `.pdf`, `.docx`, and `.txt` files  
 - 📄 Intelligent chunking for large documents (handles token limits)  
@@ -20,24 +18,24 @@ A powerful web application that summarizes `.pdf`, `.docx`, and `.txt` files usi
 
 ---
 
-## 🖥️ Demo
+🖥️ Demo
 
 > Upload a file, click "Summarize", and get a clean, concise, and well-structured summary.  
 > *(Optional: You can add a screenshot or screen recording here.)*
 
 ---
 
-## 🛠️ Tech Stack
+🛠️ Tech Stack
 
-| Frontend            | Backend        | AI/ML                          |
-|---------------------|----------------|---------------------------------|
-| HTML, CSS, JavaScript | Python (Flask) | Hugging Face Inference API     |
+| Frontend              | Backend          | AI/ML                          |
+|-----------------------|------------------|--------------------------------|
+| HTML, CSS, JavaScript | Python (Flask) | Hugging Face Inference API   |
 
 ---
 
-## 🚀 Getting Started
+🚀 Getting Started
 
-### 📦 Prerequisites
+📦 Prerequisites
 
 Make sure you have:
 
@@ -47,7 +45,7 @@ Make sure you have:
 
 ---
 
-### 📁 Clone the Repository
+📁 Clone the Repository
 
 ```bash
 git clone https://github.com/your-username/document-summarizer.git
@@ -56,7 +54,7 @@ cd document-summarizer
 
 ---
 
-### 🧪 (Optional) Create a Virtual Environment
+🧪 (Optional) Create a Virtual Environment
 
 ```bash
 python -m venv venv
@@ -65,7 +63,7 @@ source venv/bin/activate   # Windows: venv\Scripts\activate
 
 ---
 
-### 📥 Install Required Packages
+📥 Install Required Packages
 
 ```bash
 pip install -r requirements.txt
@@ -79,7 +77,7 @@ pip install flask requests docx2txt pdfplumber
 
 ---
 
-### 🔐 Setup Hugging Face API Token
+🔐 Setup Hugging Face API Token
 
 In `app.py`, replace this line:
 
@@ -91,7 +89,7 @@ Get your token from [Hugging Face settings](https://huggingface.co/settings/toke
 
 ---
 
-### ▶️ Run the App
+▶️ Run the App
 
 ```bash
 python app.py
@@ -101,7 +99,7 @@ Visit [http://127.0.0.1:5000](http://127.0.0.1:5000) in your browser.
 
 ---
 
-## 📂 Project Structure
+📂 Project Structure
 
 ```
 document-summarizer/
@@ -116,7 +114,7 @@ document-summarizer/
 
 ---
 
-## 🧠 How It Works
+🧠 How It Works
 
 1. User uploads a `.pdf`, `.docx`, or `.txt` file.  
 2. Flask reads and extracts raw text using appropriate libraries.  
@@ -130,7 +128,7 @@ document-summarizer/
 
 ---
 
-## 🧪 API Used
+🧪 API Used
 
 - **Model**: [`mistralai/Mixtral-8x7B-Instruct`](https://huggingface.co/mistralai/Mixtral-8x7B-Instruct)
 - **Endpoint**: Hugging Face Inference API
@@ -142,7 +140,3 @@ document-summarizer/
 > _“Summarizing knowledge, one document at a time.”_
 
 ```
-
----
-
-✅ You can now copy-paste this directly into your `README.md` file. Let me know if you want to add a license badge, a live demo link, or deployment instructions!
