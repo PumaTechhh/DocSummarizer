@@ -19,6 +19,7 @@ A powerful web application that summarizes `.pdf`, `.docx`, and `.txt` files usi
 ---
 
 🖥️ Demo
+![image](https://github.com/user-attachments/assets/9f586591-be1e-44c1-9897-16f75e701ad9)
 
 > Upload a file, click "Summarize", and get a clean, concise, and well-structured summary.  
 > *(Optional: You can add a screenshot or screen recording here.)*
