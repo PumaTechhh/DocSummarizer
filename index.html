@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Document Summarizer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .logo {
+            font-size: 72px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: #2a2a3c;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            width: 600px;
+            padding: 10px;
+            transition: transform 0.3s ease;
+        }
+        .search-bar:hover {
+            transform: scale(1.02);
+        }
+        .search-bar input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            padding: 10px;
+            color: #e0e0e0;
+            background-color: #3a3a4e;
+            border-radius: 20px;
+            margin-right: 10px;
+        }
+        .search-bar button {
+            background-color: #4a4a6e;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #ffffff;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+        }
+        .search-bar button:hover {
+            background-color: #5a5a8e;
+            transform: translateY(-2px);
+        }
+        .summarizebtn {
+            display: block;
+            margin: 20px auto;
+            background-color: #ff6f61;
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, transform 0.1s ease;
+        }
+        .summarizebtn:disabled {
+            background-color: #a0a0a0;
+            cursor: not-allowed;
+        }
+        .summarizebtn:hover:not(:disabled) {
+            background-color: #ff8a80;
+            transform: translateY(-2px);
+        }
+        .summary-container {
+            margin-top: 20px;
+            width: 600px;
+            position: relative;
+        }
+        .summary-output {
+            max-height: 600px;
+            overflow: auto;
+            background-color: #2a2a3c;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid #3a3a4e;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+            transition: max-height 0.3s ease;
+        }
+        .summary-output.expanded {
+            max-height: none;
+        }
+        .overflow-indicator {
+            display: none;
+            margin: 10px 0;
+            color: #ff6f61;
+            font-size: 14px;
+            text-align: center;
+        }
+        .show-more-btn {
+            display: none;
+            margin: 10px auto;
+            background-color: #4a4a6e;
+            color: #ffffff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+        }
+        .show-more-btn:hover {
+            background-color: #5a5a8e;
+            transform: translateY(-2px);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .modal-content {
+            background-color: #2a2a3c;
+            padding: 30px;
+            border-radius: 15px;
+            width: 400px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        .modal-content h3 {
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+        .modal-content input[type="file"] {
+            margin-bottom: 20px;
+            color: #e0e0e0;
+        }
+        .modal-content button {
+            background-color: #4a4a6e;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+        }
+        .modal-content button:hover {
+            background-color: #5a5a8e;
+            transform: translateY(-2px);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .search-bar, .summary-container {
+                width: 90%;
+            }
+            .logo {
+                font-size: 48px;
+            }
+            .modal-content {
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">AI Document Summarizer</div>
+    <div class="search-bar">
+        <input type="text" id="file-name" readonly placeholder="No file selected">
+        <button onclick="openModal()">Upload Document</button>
+    </div>
+    <button class="summarizebtn" id="summarizebtn" disabled onclick="summarizeText()">Summarize Text</button>
+    <div class="summary-container">
+        <div class="summary-output" id="summary-output"></div>
+        <div class="overflow-indicator" id="overflow-indicator">Scroll down or click "Show More" to see the full summary.</div>
+        <button class="show-more-btn" id="show-more-btn" onclick="toggleSummary()">Show More</button>
+    </div>
+
+    <!-- Modal for file upload -->
+    <div class="modal" id="upload-modal">
+        <div class="modal-content">
+            <h3>Upload Document</h3>
+            <input type="file" id="file-input" accept=".docx,.txt,.pdf">
+            <button onclick="uploadFile()">Okay</button>
+        </div>
+    </div>
+
+    <script>
+        let selectedFileName = null;
+        const summarizeBtn = document.getElementById('summarizebtn');
+        const summaryOutput = document.getElementById('summary-output');
+        const showMoreBtn = document.getElementById('show-more-btn');
+        const overflowIndicator = document.getElementById('overflow-indicator');
+        let isExpanded = false;
+
+        function openModal() {
+            document.getElementById('upload-modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('upload-modal').style.display = 'none';
+        }
+
+        function uploadFile() {
+            const fileInput = document.getElementById('file-input');
+            const file = fileInput.files[0];
+            if (!file) {
+                alert("Please select a file.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    selectedFileName = data.filename;
+                    document.getElementById('file-name').value = selectedFileName;
+                    summarizeBtn.disabled = false; // Enable the button
+                    closeModal();
+                }
+            })
+            .catch(error => {
+                alert("Error uploading file: " + error);
+            });
+        }
+
+        function toggleSummary() {
+            if (isExpanded) {
+                summaryOutput.classList.remove('expanded');
+                showMoreBtn.textContent = 'Show More';
+                overflowIndicator.style.display = 'block';
+            } else {
+                summaryOutput.classList.add('expanded');
+                showMoreBtn.textContent = 'Show Less';
+                overflowIndicator.style.display = 'none';
+            }
+            isExpanded = !isExpanded;
+        }
+
+        function summarizeText() {
+            if (!selectedFileName) {
+                alert("Please upload a file first.");
+                return;
+            }
+
+            console.log("Sending request to /summarize with filename:", selectedFileName);
+
+            fetch('/summarize', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ filename: selectedFileName })
+            })
+            .then(response => {
+                console.log("Response status:", response.status);
+                return response.json();
+            })
+            .then(data => {
+                console.log("Received data:", data); // Log the full response
+                if (data.error) {
+                    summaryOutput.textContent = data.error;
+                    showMoreBtn.style.display = 'none';
+                    overflowIndicator.style.display = 'none';
+                } else {
+                    summaryOutput.textContent = data.summary;
+                    // Check if content overflows
+                    if (summaryOutput.scrollHeight > summaryOutput.clientHeight) {
+                        showMoreBtn.style.display = 'block';
+                        overflowIndicator.style.display = 'block';
+                    } else {
+                        showMoreBtn.style.display = 'none';
+                        overflowIndicator.style.display = 'none';
+                    }
+                }
+                summaryOutput.style.display = 'block';
+            })
+            .catch(error => {
+                console.log("Error:", error);
+                summaryOutput.textContent = "Error generating summary: " + error;
+                summaryOutput.style.display = 'block';
+                showMoreBtn.style.display = 'none';
+                overflowIndicator.style.display = 'none';
+            });
+        }
+    </script>
+</body>
+</html>
